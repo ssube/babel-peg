@@ -82,14 +82,14 @@
 }
 
 start
-  = body:additive { return body.evaluate(); }
+  = body:additive ws* { return body.evaluate(); }
 
 additive
-  = lh:mult op:additive_op rh:additive { return new BinaryNode({lh, op, rh}); }
+  = lh:mult ws* op:additive_op ws* rh:additive { return new BinaryNode({lh, op, rh}); }
   / mult
 
 mult
-  = lh:unary op:mult_op rh:mult { return new BinaryNode({lh, op: op, rh}); }
+  = lh:unary ws* op:mult_op ws* rh:mult { return new BinaryNode({lh, op: op, rh}); }
   / unary
 
 unary
@@ -110,3 +110,6 @@ specialteger
 
 integer "integer"
   = digits:[0-9]+ { return new NumericPrim({value: digits.join("")}); }
+
+ws
+  = [ \t\r\n] { return null; }
