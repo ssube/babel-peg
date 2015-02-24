@@ -1,0 +1,116 @@
+/*
+ * Classic example grammar, which recognizes simple arithmetic expressions like
+ * "2*(3+4)". The parser generated from this grammar then computes their value.
+ */
+
+{
+  function BinaryNode(args) {
+    this.lh = args.lh;
+    this.op = args.op;
+    this.rh = args.rh;
+  }
+
+  BinaryNode.prototype.eval = function BinaryNode_eval() {
+    var lho = this.lh.eval(), rho = this.rh.eval();
+    switch (this.op) {
+      case "+": return this.lh._add ? this.lh._add(lho, rho) : lho + rho;
+      case "-": return this.lh._sub ? this.lh._sub(lho, rho) : lho - rho;
+      case "/": return this.lh._div ? this.lh._div(lho, rho) : lho / rho;
+      case "*": return this.lh._mul ? this.lh._mul(lho, rho) : lho * rho;
+      default: throw new Error("Unknown operator.");
+    }
+  }
+
+  BinaryNode.prototype.toString = function BinaryNode_toString() {
+    return JSON.stringify(this);
+  }
+
+  function UnaryNode(args) {
+    this.op = args.op;
+    this.bh = args.bh;
+  }
+
+  UnaryNode.prototype.eval = function UnaryNode_eval() {
+    var bho = this.bh.eval();
+    switch (this.op) {
+      case "--": return --bho;
+      case "++": return ++bho;
+      case "-": return -bho;
+      case "+": return +bho;
+      default: throw new Error("Unknown operator.");
+    }
+  }
+
+  UnaryNode.prototype.toString = function UnaryNode_toString() {
+    return JSON.stringify(this);
+  }
+
+  function NumericPrim(args) {
+    this.val = parseInt(args.val, 10);
+  }
+  
+  NumericPrim.prototype.eval = function NumericPrim_eval() {
+    return this.val;
+  }
+
+  NumericPrim.prototype.toString = function NumericPrim_toString() {
+    return JSON.stringify(this);
+  }
+
+  function SpecialPrim(args) {
+    this.val = parseInt(args.val, 10);
+    console.log("Creating SpecialPrim", this);
+  }
+
+  SpecialPrim.prototype._add = function SpecialPrim__add(lho, rho) {
+    console.log("Calling SpecialPrim__add", this);
+    return 100 - lho - rho;
+  }
+
+  SpecialPrim.prototype._mul = function SpecialPrim__mul(lho, rho) {
+    console.log("Calling SpecialPrim__mul", this);
+    return 100 - (lho * rho);
+  }
+  
+  SpecialPrim.prototype.eval = function SpecialPrim_eval() {
+    let specialty_x = i => ++i;
+    return this.val;
+  }
+
+  SpecialPrim.prototype.toString = function SpecialPrim_toString() {
+    return JSON.stringify(this);
+  }
+}
+
+start
+  = body:additive { return body.eval(); }
+
+additive
+  = left:multiplicative op:OPER_ADD right:additive { return new BinaryNode({lh: left, op: op, rh: right}); }
+  / multiplicative
+
+multiplicative
+  = left:unary op:OPER_MUL right:multiplicative { return new BinaryNode({lh: left, op: op, rh: right}); }
+  / unary
+
+unary
+  = "--" p:primary { return new UnaryNode({bh: p, op: "--"}); }
+  / "++" p:primary { return new UnaryNode({bh: p, op: "++"}); }
+  / "-" p:primary { return new UnaryNode({bh: p, op: "-"}); }
+  / "+" p:primary { return new UnaryNode({bh: p, op: "+"}); }
+  / primary
+
+primary
+  = specialteger
+  / integer
+  / "(" additive:additive ")" { return additive; }
+
+
+OPER_ADD = "+" / "-"
+OPER_MUL = "*" / "/"
+
+specialteger
+  = "s_" digits:[0-9]+ { return new SpecialPrim({val: digits.join("")}); }
+
+integer "integer"
+  = digits:[0-9]+ { return new NumericPrim({val: digits.join("")}); }

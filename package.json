@@ -1,0 +1,35 @@
+{
+  "name": "babel-peg",
+  "version": "1.0.0",
+  "description": "Repo combining PegJS and BabelJS",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "babel": "~4.4.6",
+    "gulp": "~3.8.11",
+    "gulp-peg": "~0.1.2",
+    "gulp-babel": "~4.0.0"
+  },
+  "devDependencies": {
+    "gulp-peg": "~0.1.2",
+    "gulp": "~3.8.11",
+    "gulp-babel": "~4.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssube/babel-peg"
+  },
+  "keywords": [
+    "babel",
+    "6to5",
+    "pegjs",
+    "gulp"
+  ],
+  "author": "ssube",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/ssube/babel-peg/issues"
+  }
+}
