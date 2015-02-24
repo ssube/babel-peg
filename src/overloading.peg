@@ -35,7 +35,7 @@
     }
 
     evaluate() {
-      var lho = this.lh.evaluate(), rho = this.rh.evaluate();
+      let lho = this.lh.evaluate(), rho = this.rh.evaluate();
       switch (this.op) {
         case "+": return this.lh._add ? this.lh._add(lho, rho) : lho + rho;
         case "-": return this.lh._sub ? this.lh._sub(lho, rho) : lho - rho;
@@ -53,7 +53,7 @@
     }
 
     evaluate() {
-      var bho = this.bh.evaluate();
+      let bho = this.bh.evaluate();
       switch (this.op) {
         case "--": return --bho;
         case "++": return ++bho;

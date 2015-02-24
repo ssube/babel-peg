@@ -1,6 +1,6 @@
-var parser = require("./overloading.js");
+let parser = require("./overloading.js");
 
-var input = "";
+let input = "";
 
 process.stdin.setEncoding("utf8");
 process.stdin.on("readable", () => {
@@ -10,6 +10,6 @@ process.stdin.on("readable", () => {
     }
 });
 process.stdin.on("end", () => {
-    var output = parser.parse(input);
+    let output = parser.parse(input);
     console.log(output);
 });
