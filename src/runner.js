@@ -1,4 +1,4 @@
-let parser = require("./overloading.js");
+let parser = require("./grammar");
 
 let input = "";
 
